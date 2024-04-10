@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function PageLogin() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -20,8 +22,26 @@ export function PageLogin() {
   function handleFormSubmit(e) {
     e.preventDefault();
 
-    console.log("-----------------------");
-    console.log(email, password);
+    if (email === "" || password === "") {
+      console.error("ERROR: blogi formos duomenys");
+      return;
+    }
+
+    fetch("http://localhost:4821/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.loggedIn === true) {
+          navigate("/account");
+        }
+      })
+      .catch((err) => console.error(err));
   }
 
   return (

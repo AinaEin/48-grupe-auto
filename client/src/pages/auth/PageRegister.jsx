@@ -33,17 +33,14 @@ export function PageRegister() {
     fetch("http://localhost:4821/api/register", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
-      body: JSON.stringify({
-        email,
-        password,
-      })
+      body: JSON.stringify({ email, password }),
     })
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .catch(err => console.error(err));
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
   }
 
   return (
@@ -106,4 +103,3 @@ export function PageRegister() {
     </main>
   );
 }
-

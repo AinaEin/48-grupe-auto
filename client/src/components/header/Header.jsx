@@ -2,6 +2,28 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/react.svg";
 
 export function Header() {
+  const isUserLoggedIn = true;
+
+  const guestActions = (
+    <div className="col-md-3 text-end">
+      <Link to="/login" className="btn btn-outline-primary me-2">
+        Login
+      </Link>
+      <Link to="/register" className="btn btn-primary">
+        Register
+      </Link>
+    </div>
+  );
+
+  const userActions = (
+    <div className="col-md-3 text-end">
+      Hello, user!
+      <Link to="/logout" className="btn btn-primary">
+        Logout
+      </Link>
+    </div>
+  );
+
   return (
     <div className="container">
       <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -26,14 +48,7 @@ export function Header() {
           </Link>
         </ul>
 
-        <div className="col-md-3 text-end">
-          <Link to="/login" className="btn btn-outline-primary me-2">
-            Login
-          </Link>
-          <Link to="/register" className="btn btn-primary">
-            Register
-          </Link>
-        </div>
+        {isUserLoggedIn ? userActions : guestActions}
       </header>
     </div>
   );
