@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import carImg from "../../assets/cars/1.jpg";
 import { NewestCarsList } from "../../components/auto-list/NewestCarsList";
+import { useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
 
 export function PageCarListingInner() {
-  const isUserLoggedIn = false;
+  const { loginStatus } = useContext(GlobalContext);
   const guestActions = (
     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
       <Link to="/login" className="btn btn-primary btn-lg px-4 me-md-2">
@@ -54,7 +56,7 @@ export function PageCarListingInner() {
               <li>Detail</li>
               <li>Detail</li>
             </ul>
-            {isUserLoggedIn ? userActions : guestActions}
+            {loginStatus ? userActions : guestActions}
           </div>
         </div>
       </section>

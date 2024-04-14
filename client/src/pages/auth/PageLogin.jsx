@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext";
 
 export function PageLogin() {
+  const { updateLoginStatus } = useContext(GlobalContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +40,7 @@ export function PageLogin() {
       .then((res) => res.json())
       .then((data) => {
         if (data.loggedIn === true) {
+          updateLoginStatus(true);
           navigate("/account");
         }
       })
