@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { Alert } from "../../components/alert/Alert";
 
 export function PageRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repass, setRepass] = useState("");
+  const [responseText, setResponseText] = useState("");
+  const [responseType, setResponseType] = useState("");
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -39,7 +42,10 @@ export function PageRegister() {
       body: JSON.stringify({ email, password }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        setResponseType(data.type);
+        setResponseText(data.message);
+      })
       .catch((err) => console.error(err));
   }
 
@@ -51,6 +57,8 @@ export function PageRegister() {
           className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3 col-xxl-4 offset-xxl-4"
         >
           <h1 className="h3 mb-3 fw-normal">Please register</h1>
+
+          <Alert type={responseType} text={responseText} />
 
           <div className="form-floating">
             <input
