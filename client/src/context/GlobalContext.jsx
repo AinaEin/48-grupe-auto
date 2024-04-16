@@ -9,6 +9,10 @@ export const initialContext = {
   updateTotalSumToPay: () => {},
   cartData: [],
   updateCartItemAmount: () => {},
+  newestCars: [],
+  updateNewestCars: () => {},
+  allCars: [],
+  updateAllCars: () => {},
 };
 
 export const GlobalContext = createContext(initialContext);
@@ -19,6 +23,8 @@ export function ContextWrapper(props) {
     initialContext.totalSumToPay
   );
   const [cartData, setCartData] = useState(initialContext.cartData);
+  const [newestCars, setNewestCars] = useState(initialContext.newestCars);
+  const [allCars, setAllCars] = useState(initialContext.allCars);
 
   useEffect(() => {
     if (loginStatus === true) {
@@ -37,6 +43,14 @@ export function ContextWrapper(props) {
     setTotalSumToPay((n) => n + sumChange);
   }
 
+  function updateNewestCars(list) {
+    setNewestCars(list);
+  }
+
+  function updateAllCars(list) {
+    setAllCars(list);
+  }
+
   function updateCartItemAmount(name, amountChange) {
     console.log(">>>", name, amountChange);
   }
@@ -48,6 +62,10 @@ export function ContextWrapper(props) {
     updateTotalSumToPay,
     cartData,
     updateCartItemAmount,
+    newestCars,
+    updateNewestCars,
+    allCars,
+    updateAllCars,
   };
 
   return (

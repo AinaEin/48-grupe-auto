@@ -16,14 +16,129 @@ app.use(cors(corsOptions));
 app.use(helmet(helmetOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 const users = [];
 
 const cars = [
   {
     id: 1,
-    name: "Auto pavadinimas",
+    name: "Auto pavadinimas 1",
     img: "http://localhost:4821/img/cars/1.jpg",
+    price: 0,
+  },
+  {
+    id: 2,
+    name: "Auto pavadinimas 2",
+    img: "http://localhost:4821/img/cars/2.jpg",
+    price: 0,
+  },
+  {
+    id: 3,
+    name: "Auto pavadinimas 3",
+    img: "http://localhost:4821/img/cars/3.jpg",
+    price: 0,
+  },
+  {
+    id: 4,
+    name: "Auto pavadinimas 4",
+    img: "http://localhost:4821/img/cars/4.jpg",
+    price: 0,
+  },
+  {
+    id: 5,
+    name: "Auto pavadinimas 5",
+    img: "http://localhost:4821/img/cars/5.jpg",
+    price: 0,
+  },
+  {
+    id: 6,
+    name: "Auto pavadinimas 6",
+    img: "http://localhost:4821/img/cars/6.jpg",
+    price: 0,
+  },
+  {
+    id: 7,
+    name: "Auto pavadinimas 7",
+    img: "http://localhost:4821/img/cars/7.jpg",
+    price: 0,
+  },
+  {
+    id: 8,
+    name: "Auto pavadinimas 8",
+    img: "http://localhost:4821/img/cars/8.jpg",
+    price: 0,
+  },
+  {
+    id: 9,
+    name: "Auto pavadinimas 9",
+    img: "http://localhost:4821/img/cars/9.jpg",
+    price: 0,
+  },
+  {
+    id: 10,
+    name: "Auto pavadinimas 10",
+    img: "http://localhost:4821/img/cars/10.jpg",
+    price: 0,
+  },
+  {
+    id: 11,
+    name: "Auto pavadinimas 11",
+    img: "http://localhost:4821/img/cars/11.jpg",
+    price: 0,
+  },
+  {
+    id: 12,
+    name: "Auto pavadinimas 12",
+    img: "http://localhost:4821/img/cars/12.jpg",
+    price: 0,
+  },
+  {
+    id: 13,
+    name: "Auto pavadinimas 13",
+    img: "http://localhost:4821/img/cars/13.jpg",
+    price: 0,
+  },
+  {
+    id: 14,
+    name: "Auto pavadinimas 14",
+    img: "http://localhost:4821/img/cars/14.jpg",
+    price: 0,
+  },
+  {
+    id: 15,
+    name: "Auto pavadinimas 15",
+    img: "http://localhost:4821/img/cars/15.jpg",
+    price: 0,
+  },
+  {
+    id: 16,
+    name: "Auto pavadinimas 16",
+    img: "http://localhost:4821/img/cars/16.jpg",
+    price: 0,
+  },
+  {
+    id: 17,
+    name: "Auto pavadinimas 17",
+    img: "http://localhost:4821/img/cars/17.jpg",
+    price: 0,
+  },
+  {
+    id: 18,
+    name: "Auto pavadinimas 18",
+    img: "http://localhost:4821/img/cars/18.jpg",
+    price: 0,
+  },
+  {
+    id: 19,
+    name: "Auto pavadinimas 19",
+    img: "http://localhost:4821/img/cars/19.jpg",
+    price: 0,
+  },
+  {
+    id: 20,
+    name: "Auto pavadinimas 20",
+    img: "http://localhost:4821/img/cars/20.jpg",
     price: 0,
   },
 ];
@@ -105,6 +220,22 @@ app.get("/api/cart-details", (req, res) => {
           amount: 0,
         },
       ],
+    })
+  );
+});
+
+app.get("/api/newest-cars", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      list: cars.slice(-6).reverse(),
+    })
+  );
+});
+
+app.get("/api/all-cars", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      list: cars,
     })
   );
 });
