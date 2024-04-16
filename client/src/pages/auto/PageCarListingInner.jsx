@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import carImg from "../../assets/cars/1.jpg";
 import { NewestCarsList } from "../../components/auto-list/NewestCarsList";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -30,7 +29,7 @@ export function PageCarListingInner() {
         <div className="row flex-lg-row-reverse align-items-center g-5 py-5">
           <div className="col-10 col-sm-8 col-lg-6">
             <img
-              src={carImg}
+              src="http://localhost:4821/img/cars/1.jpg"
               className="d-block mx-lg-auto img-fluid"
               alt="Bootstrap Themes"
               width="700"
