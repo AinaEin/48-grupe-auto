@@ -1,10 +1,7 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { GlobalContext } from "../../context/GlobalContext";
-// import style from './PageMyAutoList.module.css';
 
 export function PageMyAutoList() {
-  const { allCars } = useContext(GlobalContext);
+  const allCars = [];
 
   return (
     <div className="container">
