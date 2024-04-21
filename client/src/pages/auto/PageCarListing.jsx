@@ -6,14 +6,11 @@ export function PageCarListing() {
   const { allCars, updateAllCars } = useContext(GlobalContext);
 
   useEffect(() => {
-    if (allCars.length === 0) {
-      fetch("http://localhost:4821/api/all-cars")
-        .then((res) => res.json())
-        .then((data) => updateAllCars(data.list))
-        .catch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allCars]);
+    fetch("http://localhost:4821/api/all-cars")
+      .then((res) => res.json())
+      .then((data) => updateAllCars(data.list))
+      .catch(console.error);
+  }, []);
 
   return (
     <>

@@ -7,7 +7,7 @@ export function PageMyAutoCreate() {
   const [price, setPrice] = useState("");
   const [responseText, setResponseText] = useState("");
   const [responseType, setResponseType] = useState("");
-  const { userId } = useContext(GlobalContext);
+  const { userId, addMyNewCar } = useContext(GlobalContext);
 
   function handleNameChange(e) {
     setName(e.target.value);
@@ -38,6 +38,10 @@ export function PageMyAutoCreate() {
       .then((data) => {
         setResponseType(data.type);
         setResponseText(data.message);
+
+        if (data.type === "success") {
+          addMyNewCar(data.car);
+        }
       })
       .catch((err) => console.error(err));
   }

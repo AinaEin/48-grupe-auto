@@ -1,31 +1,31 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import bodyParser from 'body-parser';
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import bodyParser from "body-parser";
 
 const app = express();
 
 const corsOptions = {
-    origin: 'http://localhost:4820'
+  origin: "http://localhost:4820",
 };
 const helmetOptions = {
-    crossOriginResourcePolicy: false
+  crossOriginResourcePolicy: false,
 };
 
 app.use(cors(corsOptions));
 app.use(helmet(helmetOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 let lastUserId = 0;
 const users = [
-    // {
-    //     id: 1,
-    //     email: 'admin@admin',
-    //     password: 'admin',
-    //     cars: [1, 3, 77],
-    // },
+  // {
+  //     id: 1,
+  //     email: 'admin@admin',
+  //     password: 'admin',
+  //     cars: [1, 3, 77],
+  // },
 ];
 
 // const cars = [
@@ -152,154 +152,221 @@ const users = [
 // ];
 
 let lastCarId = 0;
-const cars = [
-    // {
-    //     userId: 1,
-    //     id: 1,
-    //     name: 'Auto pavadinimas 1',
-    //     img: 'http://localhost:4821/img/cars/1.jpg',
-    //     price: 0,
-    // },
+let cars = [
+  // {
+  //     userId: 1,
+  //     id: 1,
+  //     name: 'Auto pavadinimas 1',
+  //     img: 'http://localhost:4821/img/cars/1.jpg',
+  //     price: 0,
+  // },
 ];
 
-app.post('/api/register', (req, res) => {
-    const { email, password } = req.body;
-    let isUniqueUserEmail = true;
+app.post("/api/register", (req, res) => {
+  const { email, password } = req.body;
+  let isUniqueUserEmail = true;
 
-    for (const user of users) {
-        if (user.email === email) {
-            isUniqueUserEmail = false;
-            break;
-        }
+  for (const user of users) {
+    if (user.email === email) {
+      isUniqueUserEmail = false;
+      break;
     }
+  }
 
-    if (isUniqueUserEmail) {
-        users.push({
-            id: ++lastUserId,
-            email,
-            password,
-            cars: [],
-        });
-        console.log(users);
-
-        return res.send(JSON.stringify({
-            type: 'success',
-            message: 'User successfully registered'
-        }));
-    }
-
-    return res.send(JSON.stringify({
-        type: 'error',
-        message: 'User already exists'
-    }));
-});
-
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-    let userId = -1;
-
-    for (const user of users) {
-        if (user.email === email &&
-            user.password === password) {
-            userId = user.id;
-            break;
-        }
-    }
-
-    if (userId > 0) {
-        return res.send(JSON.stringify({
-            message: 'User successfully logged in',
-            loggedIn: true,
-            userId,
-        }));
-    }
-
-    return res.send(JSON.stringify({
-        message: 'Such user does not exist',
-        loggedIn: false,
-    }));
-});
-
-app.get('/api/cart-details', (req, res) => {
-    return res.send(JSON.stringify({
-        data: [
-            {
-                name: 'Pomidoras',
-                price: 2,
-                amount: 0,
-            },
-            {
-                name: 'Agurkas',
-                price: 1.5,
-                amount: 0,
-            },
-            {
-                name: 'Svogūnas',
-                price: 5,
-                amount: 0,
-            },
-        ],
-    }));
-});
-
-app.get('/api/newest-cars', (req, res) => {
-    return res.send(JSON.stringify({
-        list: cars.slice(-6).reverse()
-    }));
-});
-
-app.get('/api/all-cars', (req, res) => {
-    return res.send(JSON.stringify({
-        list: cars
-    }));
-});
-
-app.post('/api/create-car', (req, res) => {
-    const { userId, name, price } = req.body;
-
-    cars.push({
-        id: ++lastCarId,
-        userId,
-        name,
-        price,
-        img: 'http://localhost:4821/img/cars/1.jpg',
+  if (isUniqueUserEmail) {
+    users.push({
+      id: ++lastUserId,
+      email,
+      password,
+      cars: [],
     });
+    console.log(users);
 
-    for (const user of users) {
-        if (user.id === userId) {
-            user.cars.push(lastCarId);
-            break;
-        }
+    return res.send(
+      JSON.stringify({
+        type: "success",
+        message: "User successfully registered",
+      })
+    );
+  }
+
+  return res.send(
+    JSON.stringify({
+      type: "error",
+      message: "User already exists",
+    })
+  );
+});
+
+app.post("/api/login", (req, res) => {
+  const { email, password } = req.body;
+  let userId = -1;
+
+  for (const user of users) {
+    if (user.email === email && user.password === password) {
+      userId = user.id;
+      break;
     }
+  }
 
-    return res.send(JSON.stringify({
-        type: 'success',
-        message: 'Car created',
-    }));
+  if (userId > 0) {
+    return res.send(
+      JSON.stringify({
+        message: "User successfully logged in",
+        loggedIn: true,
+        userId,
+      })
+    );
+  }
+
+  return res.send(
+    JSON.stringify({
+      message: "Such user does not exist",
+      loggedIn: false,
+    })
+  );
 });
 
-app.get('/api/my-cars/:userId', (req, res) => {
-    console.log(req.params);
-
-    return res.send(JSON.stringify({
-        list: cars.filter(car => car.userId === req.params.userId),
-    }));
+app.get("/api/cart-details", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      data: [
+        {
+          name: "Pomidoras",
+          price: 2,
+          amount: 0,
+        },
+        {
+          name: "Agurkas",
+          price: 1.5,
+          amount: 0,
+        },
+        {
+          name: "Svogūnas",
+          price: 5,
+          amount: 0,
+        },
+      ],
+    })
+  );
 });
 
-app.get('*', (req, res) => {
-    console.log('404');
-    return res.send('404 - content not found');
+app.get("/api/newest-cars", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      list: cars.slice(-6).reverse(),
+    })
+  );
+});
+
+app.get("/api/all-cars", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      list: cars,
+    })
+  );
+});
+
+app.post("/api/create-car", (req, res) => {
+  const { userId, name, price } = req.body;
+
+  cars.push({
+    id: ++lastCarId,
+    userId,
+    name,
+    price,
+    img: "http://localhost:4821/img/cars/1.jpg",
+  });
+
+  for (const user of users) {
+    if (user.id === userId) {
+      user.cars.push(lastCarId);
+      break;
+    }
+  }
+
+  return res.send(
+    JSON.stringify({
+      type: "success",
+      message: "Car created",
+      car: cars.at(-1),
+    })
+  );
+});
+
+app.get("/api/my-cars/:userId", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      list: cars.filter((car) => car.userId === +req.params.userId),
+    })
+  );
+});
+
+app.get("/api/car/:carId", (req, res) => {
+  return res.send(
+    JSON.stringify({
+      cars: cars.filter((car) => car.id === +req.params.carId),
+    })
+  );
+});
+
+app.delete("/api/car/:carId", (req, res) => {
+
+  // jog nereiketu daryti let ir butu galima pasilikti const?
+
+// let lastCarId = 0;
+// const cars = [];
+
+// app.delete("/api/car/:carId", (req, res) => {
+//   sukuriam nauja arreju be istrintos masinos
+//   const updatedCars = cars.filter((car) => car.id !== +req.params.carId);
+
+//   patikrina ar skelbimas buvo istrinttas
+//   if (updatedCars.length === cars.length) {
+//     // If no car was deleted, send an error response
+//     return res.status(404).send(
+//       JSON.stringify({
+//         type: "error",
+//         message: "Car not found",
+//       })
+//     );
+//   }
+    // at naujinam skelbimu sara
+//   cars.length = 0;
+//   updatedCars.forEach((car) => cars.push(car));
+
+//   return res.send(
+//     JSON.stringify({
+//       type: "success",
+//       message: "Auto deleted",
+//     })
+//   );
+// });
+
+  cars = cars.filter((car) => car.id !== +req.params.carId);
+
+  return res.send(
+    JSON.stringify({
+      type: "success",
+      message: "Auto deleted",
+    })
+  );
+});
+
+app.get("*", (req, res) => {
+  console.log("404");
+  return res.send("404 - content not found");
 });
 
 app.use((req, res, next) => {
-    return res.status(404).send("Sorry can't find that!");
+  return res.status(404).send("Sorry can't find that!");
 });
 
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
 
 app.listen(4821, () => {
-    console.log(`\nhttp://localhost:4821`);
+  console.log(`\nhttp://localhost:4821`);
 });

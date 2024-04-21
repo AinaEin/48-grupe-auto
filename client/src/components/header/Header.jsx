@@ -1,14 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/react.svg";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useContext } from "react";
 
 export function Header() {
+  const navigate = useNavigate();
   const { loginStatus, updateLoginStatus, totalSumToPay } =
     useContext(GlobalContext);
 
   function handleLogoutClick() {
     updateLoginStatus(false);
+    navigate("/");
   }
 
   const guestActions = (
