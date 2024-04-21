@@ -323,7 +323,6 @@ app.delete("/api/car/:carId", (req, res) => {
 
 //   patikrina ar skelbimas buvo istrinttas
 //   if (updatedCars.length === cars.length) {
-//     // If no car was deleted, send an error response
 //     return res.status(404).send(
 //       JSON.stringify({
 //         type: "error",
