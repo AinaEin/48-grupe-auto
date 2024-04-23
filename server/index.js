@@ -2,6 +2,24 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
+import mysql from "mysql2/promise";
+
+try {
+  const connection = await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+  });
+
+  await connection.query("USE grupe48");
+
+  const sql = "SELECT * FROM users;";
+  const ats = await connection.execute(sql);
+
+  console.log(ats[0]);
+} catch (error) {
+  console.log(error);
+}
 
 const app = express();
 
@@ -311,37 +329,8 @@ app.get("/api/car/:carId", (req, res) => {
 });
 
 app.delete("/api/car/:carId", (req, res) => {
-
-  // jog nereiketu daryti let ir butu galima pasilikti const?
-
-// let lastCarId = 0;
-// const cars = [];
-
-// app.delete("/api/car/:carId", (req, res) => {
-//   sukuriam nauja arreju be istrintos masinos
-//   const updatedCars = cars.filter((car) => car.id !== +req.params.carId);
-
-//   patikrina ar skelbimas buvo istrinttas
-//   if (updatedCars.length === cars.length) {
-//     return res.status(404).send(
-//       JSON.stringify({
-//         type: "error",
-//         message: "Car not found",
-//       })
-//     );
-//   }
-    // at naujinam skelbimu sara
-//   cars.length = 0;
-//   updatedCars.forEach((car) => cars.push(car));
-
-//   return res.send(
-//     JSON.stringify({
-//       type: "success",
-//       message: "Auto deleted",
-//     })
-//   );
-// });
-
+  // gal galima kazkaip kitaip?
+  // jog nereiketu daryti let ir butu galima pasilikti const? su splice()
   cars = cars.filter((car) => car.id !== +req.params.carId);
 
   return res.send(

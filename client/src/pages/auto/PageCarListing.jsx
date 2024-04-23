@@ -8,7 +8,10 @@ export function PageCarListing() {
   useEffect(() => {
     fetch("http://localhost:4821/api/all-cars")
       .then((res) => res.json())
-      .then((data) => updateAllCars(data.list))
+      .then((data) => {
+        console.log({data});
+        return updateAllCars(data);
+      })
       .catch(console.error);
   }, []);
 
