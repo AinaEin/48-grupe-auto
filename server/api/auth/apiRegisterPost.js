@@ -3,7 +3,7 @@ import { connection } from "../../db.js";
 export async function apiRegisterPost(req, res) {
   const minEmailLength = 6;
   const maxEmailLength = 50; 
-  const minPasswordLength = 8;
+  const minPasswordLength = 12;
   const maxPasswordLength = 100;
   const { email, password } = req.body;
   const parts = email.split("@");
@@ -75,7 +75,7 @@ export async function apiRegisterPost(req, res) {
     return res.send(
       JSON.stringify({
         type: "error",
-        message: `Email is too short, has to be at least ${minPasswordLength} symbols.`,
+        message: `Password is too short, has to be at least ${minPasswordLength} symbols.`,
       })
     );
   }
@@ -84,7 +84,7 @@ export async function apiRegisterPost(req, res) {
       return res.send(
         JSON.stringify({
           type: "error",
-          message: `Email is too long, has to be no more than ${maxPasswordLength} symbols`,
+          message: `Password is too long, has to be no more than ${maxPasswordLength} symbols`,
         })
       );
     }
