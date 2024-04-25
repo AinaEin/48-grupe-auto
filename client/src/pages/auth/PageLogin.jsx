@@ -33,7 +33,7 @@ export function PageLogin() {
       return;
     }
 
-    fetch("http://localhost:4821/api/login", {
+    fetch("http://localhost:4821/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +52,11 @@ export function PageLogin() {
           navigate("/account");
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.log(err);
+        setResponseType("error");
+        setResponseText("Kritine klaida bandant prisijungti is kliento puses");
+      });
   }
 
   return (

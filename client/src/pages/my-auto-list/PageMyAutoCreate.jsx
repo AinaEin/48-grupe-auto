@@ -26,13 +26,13 @@ export function PageMyAutoCreate() {
       return;
     }
 
-    fetch("http://localhost:4821/api/create-car", {
+    fetch("http://localhost:4821/api/cars/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ userId, name, price }),
+      body: JSON.stringify({ userId, name, price: +price }),
     })
       .then((res) => res.json())
       .then((data) => {

@@ -28,7 +28,12 @@ app.get("*", (req, res) => {
 });
 
 app.use((req, res, next) => {
-  return res.status(404).send("Sorry can't find that!");
+  return res.status(404).send(
+    JSON.stringify({
+      type: "error",
+      message: "Sorry can't find that API endpoint!",
+    })
+  );
 });
 
 app.use((err, req, res, next) => {

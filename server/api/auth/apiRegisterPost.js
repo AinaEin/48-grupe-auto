@@ -2,7 +2,7 @@ import { connection } from "../../db.js";
 
 export async function apiRegisterPost(req, res) {
   const minEmailLength = 6;
-  const maxEmailLength = 50; 
+  const maxEmailLength = 50;
   const minPasswordLength = 12;
   const maxPasswordLength = 100;
   const { email, password } = req.body;
@@ -71,6 +71,15 @@ export async function apiRegisterPost(req, res) {
     );
   }
 
+  if (typeof password !== "string") {
+    return res.send(
+      JSON.stringify({
+        type: "error",
+        message: "Password has to be a string value",
+      })
+    );
+  }
+
   if (password.length < minPasswordLength) {
     return res.send(
       JSON.stringify({
@@ -80,14 +89,14 @@ export async function apiRegisterPost(req, res) {
     );
   }
 
-    if (password.length > maxPasswordLength) {
-      return res.send(
-        JSON.stringify({
-          type: "error",
-          message: `Password is too long, has to be no more than ${maxPasswordLength} symbols`,
-        })
-      );
-    }
+  if (password.length > maxPasswordLength) {
+    return res.send(
+      JSON.stringify({
+        type: "error",
+        message: `Password is too long, has to be no more than ${maxPasswordLength} symbols`,
+      })
+    );
+  }
 
   if (password.search(/[a-z]/) == -1) {
     return res.send(
@@ -107,7 +116,7 @@ export async function apiRegisterPost(req, res) {
     );
   }
 
-    if (password.search(/[0-9]/) == -1) {
+  if (password.search(/[0-9]/) == -1) {
     return res.send(
       JSON.stringify({
         type: "error",
@@ -136,7 +145,14 @@ export async function apiRegisterPost(req, res) {
     const insertQuery = `INSERT INTO users (email, password) VALUES (?, ?);`;
     const dbResponse = await connection.execute(insertQuery, [email, password]);
 
-    console.log(dbResponse);
+    if (dbResponse[0].affectedRows !== 1) {
+      return res.send(
+        JSON.stringify({
+          type: "error",
+          message: "User could not be created, for some weird reason",
+        })
+      );
+    }
 
     return res.send(
       JSON.stringify({

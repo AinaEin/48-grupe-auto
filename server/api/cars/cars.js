@@ -1,4 +1,5 @@
 import express from "express";
+import { connection } from "../../db.js";
 
 const carsRouter = express.Router();
 
@@ -18,29 +19,39 @@ carsRouter.get("/newest", (req, res) => {
   );
 });
 
-carsRouter.post("/create", (req, res) => {
+carsRouter.post("/create", async (req, res) => {
   const { userId, name, price } = req.body;
 
-  cars.push({
-    id: ++lastCarId,
-    userId,
-    name,
-    price,
-    img: "http://localhost:4821/img/cars/1.jpg",
-  });
+  try {
+    const insertQuery = `INSERT INTO cars (userId, name, price) VALUES (?, ?, ?);`;
+    const dbResponse = await connection.execute(insertQuery, [
+      userId,
+      name,
+      price * 100,
+    ]);
 
-  for (const user of users) {
-    if (user.id === userId) {
-      user.cars.push(lastCarId);
-      break;
+    if (dbResponse[0].affectedRows === 1) {
+      return res.send(
+        JSON.stringify({
+          type: "success",
+          message: "Car created",
+          car: {
+            id: dbResponse[0].insertId,
+            name,
+            price,
+            img: "",
+          },
+        })
+      );
     }
+  } catch (error) {
+    console.error(error);
   }
 
   return res.send(
     JSON.stringify({
-      type: "success",
-      message: "Car created",
-      car: cars.at(-1),
+      type: "error",
+      message: 'Critical error while trying to create a "car for sale"',
     })
   );
 });
@@ -48,7 +59,7 @@ carsRouter.post("/create", (req, res) => {
 carsRouter.get("/my/:userId", (req, res) => {
   return res.send(
     JSON.stringify({
-      list: cars.filter((car) => car.userId === +req.params.userId),
+      list: [],
     })
   );
 });
