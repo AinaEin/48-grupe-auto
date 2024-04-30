@@ -139,6 +139,13 @@ export async function apiRegisterPost(req, res) {
     }
   } catch (error) {
     console.error(error);
+
+    return res.send(
+      JSON.stringify({
+        type: "error",
+        message: "Problems while trying to register a user",
+      })
+    );
   }
 
   try {
@@ -162,12 +169,12 @@ export async function apiRegisterPost(req, res) {
     );
   } catch (error) {
     console.error(error);
-  }
 
-  return res.send(
-    JSON.stringify({
-      type: "error",
-      message: "Register API is broken...",
-    })
-  );
+    return res.send(
+      JSON.stringify({
+        type: "error",
+        message: "Problems while trying to register a user",
+      })
+    );
+  }
 }

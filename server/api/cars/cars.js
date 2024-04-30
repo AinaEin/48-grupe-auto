@@ -22,6 +22,24 @@ carsRouter.get("/newest", (req, res) => {
 carsRouter.post("/create", async (req, res) => {
   const { userId, name, price } = req.body;
 
+  if (!userId || !name || !price) {
+    return res.send(
+      JSON.stringify({
+        type: "error",
+        message: "Check values",
+      })
+    );
+  }
+
+    if (typeof name !== "string") {
+      return res.send(
+        JSON.stringify({
+          type: "error",
+          message: "Email has to be a string value",
+        })
+      );
+    }
+
   try {
     const insertQuery = `INSERT INTO cars (userId, name, price) VALUES (?, ?, ?);`;
     const dbResponse = await connection.execute(insertQuery, [

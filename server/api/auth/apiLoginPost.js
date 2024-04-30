@@ -65,8 +65,28 @@ export async function apiLoginPost(req, res) {
     const selectQuery = `SELECT * FROM users WHERE email = ? AND password = ?;`;
     const dbResponse = await connection.execute(selectQuery, [email, password]);
 
-    if (dbResponse[0].length === 1) {
+    if (dbResponse[0].length === 0) {
       return res.send(
+        JSON.stringify({
+          message: "Such user does not exist",
+          loggedIn: false,
+        })
+      );
+    }
+
+    if (dbResponse[0].length === 1) {
+      console.log("LOGIN...");
+      const cookie = [
+        "loginToken=" + "randomstring",
+        "domain=localhost",
+        "path=/",
+        "max-age=" + 1800,
+        // 'Secure',
+        "SameSite=Lax",
+        "HttpOnly",
+      ].join("; ");
+
+      return res.set("Set-Cookie", cookie).send(
         JSON.stringify({
           message: "Welcome",
           loggedIn: true,
@@ -74,14 +94,21 @@ export async function apiLoginPost(req, res) {
         })
       );
     }
+
+    return res.send(
+      JSON.stringify({
+        message: "Problems while trying to login user",
+        loggedIn: false,
+      })
+    );
   } catch (error) {
     console.error(error);
-  }
 
-  return res.send(
-    JSON.stringify({
-      message: "Such user does not exist",
-      loggedIn: false,
-    })
-  );
+    return res.send(
+      JSON.stringify({
+        message: "Could not find user",
+        loggedIn: false,
+      })
+    );
+  }
 }

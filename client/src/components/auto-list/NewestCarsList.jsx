@@ -7,7 +7,7 @@ export function NewestCarsList() {
 
   useEffect(() => {
     if (newestCars.length === 0) {
-      fetch("http://localhost:4821/api/newest-cars")
+      fetch("http://localhost:4821/api/cars/newest")
         .then((res) => res.json())
         .then((data) => updateNewestCars(data.list))
         .catch(console.error);
