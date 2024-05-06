@@ -1,8 +1,11 @@
 import { useContext, useState } from "react";
 import { Alert } from "../../components/alert/Alert";
 import { GlobalContext } from "../../context/GlobalContext";
+import style from "./PageMyAutoCreate.module.css";
+import carDefaultImg from "../../assets/car-default.png";
 
 export function PageMyAutoCreate() {
+  const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [responseText, setResponseText] = useState("");
@@ -15,6 +18,23 @@ export function PageMyAutoCreate() {
 
   function handlePriceChange(e) {
     setPrice(e.target.value);
+  }
+
+  function handleImageChange(e) {
+    const formData = new FormData();
+    formData.append("car_image", e.target.files[0]);
+
+    fetch("http://localhost:4821/api/upload/car", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.type === "success") {
+          setImage(data.imgPath);
+        }
+      })
+      .catch(console.err);
   }
 
   function handleFormSubmit(e) {
@@ -32,7 +52,7 @@ export function PageMyAutoCreate() {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ userId, name, price: +price }),
+      body: JSON.stringify({ userId, name, price: +price, image }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -79,6 +99,14 @@ export function PageMyAutoCreate() {
               placeholder="99"
             />
             <label htmlFor="price">Price</label>
+          </div>
+          <div className="form-floating">
+            <img
+              src={image ? image : carDefaultImg}
+              alt="Car photo"
+              className={style.carImg}
+            />
+            <input onChange={handleImageChange} type="file" id="image" />
           </div>
 
           <button className="btn btn-primary w-100 py-2 mt-3" type="submit">

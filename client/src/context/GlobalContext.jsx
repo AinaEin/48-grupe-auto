@@ -3,131 +3,125 @@
 import { createContext, useEffect, useState } from "react";
 
 export const initialContext = {
-    loginStatus: false,
-    updateLoginStatus: () => { },
-    userId: -1,
-    updateUserId: () => { },
-    totalSumToPay: 0,
-    updateTotalSumToPay: () => { },
-    cartData: [],
-    updateCartItemAmount: () => { },
-    newestCars: [],
-    updateNewestCars: () => { },
-    allCars: [],
-    updateAllCars: () => { },
-    myCars: [],
-    updateMyCars: () => { },
+  loginStatus: false,
+  updateLoginStatus: () => {},
+  userId: -1,
+  updateUserId: () => {},
+  totalSumToPay: 0,
+  updateTotalSumToPay: () => {},
+  cartData: [],
+  updateCartItemAmount: () => {},
+  newestCars: [],
+  updateNewestCars: () => {},
+  allCars: [],
+  updateAllCars: () => {},
+  myCars: [],
+  updateMyCars: () => {},
 };
 
 export const GlobalContext = createContext(initialContext);
 
 export function ContextWrapper(props) {
-    const [loginStatus, setLoginStatus] = useState(initialContext.loginStatus);
-    const [userId, setUserId] = useState(initialContext.userId);
-    const [totalSumToPay, setTotalSumToPay] = useState(initialContext.totalSumToPay);
-    const [cartData, setCartData] = useState(initialContext.cartData);
-    const [newestCars, setNewestCars] = useState(initialContext.newestCars);
-    const [allCars, setAllCars] = useState(initialContext.allCars);
-    const [myCars, setMyCars] = useState(initialContext.myCars);
+  const [loginStatus, setLoginStatus] = useState(initialContext.loginStatus);
+  const [userId, setUserId] = useState(initialContext.userId);
+  const [totalSumToPay, setTotalSumToPay] = useState(
+    initialContext.totalSumToPay
+  );
+  const [cartData, setCartData] = useState(initialContext.cartData);
+  const [newestCars, setNewestCars] = useState(initialContext.newestCars);
+  const [allCars, setAllCars] = useState(initialContext.allCars);
+  const [myCars, setMyCars] = useState(initialContext.myCars);
 
-    useEffect(() => {
-        const localStatus = localStorage.getItem('isLoggedIn') === 'true' ? true : false;
-        const localId = localStorage.getItem('userId');
+  useEffect(() => {
+    fetch("http://localhost:4821/api/auth/login", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch(console.error);
+  }, []);
 
-        if (localStatus) {
-            setLoginStatus(localStatus);
-        }
+  useEffect(() => {
+    if (loginStatus === true) {
+      fetch("http://localhost:4821/api/cart-details")
+        .then((res) => res.json())
+        .then((dataObj) => setCartData(dataObj.data))
+        .catch(console.error);
 
-        if (localId !== null) {
-            setUserId(localId);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (loginStatus === true) {
-            localStorage.setItem('userId', userId);
-            localStorage.setItem('isLoggedIn', true);
-
-            fetch('http://localhost:4821/api/cart-details')
-                .then(res => res.json())
-                .then(dataObj => setCartData(dataObj.data))
-                .catch(console.error);
-
-            fetch('http://localhost:4821/api/cars/my/' + userId)
-                .then(res => res.json())
-                .then(dataObj => {
-                    if (dataObj.type === 'success') {
-                        setMyCars(dataObj.list);
-                    } else {
-                        console.error(dataObj.message);
-                    }
-                })
-                .catch(console.error);
-        }
-    }, [loginStatus, userId]);
-
-    function updateLoginStatus(newStatusValue) {
-        setLoginStatus(newStatusValue);
-
-        if (newStatusValue === false) {
-            localStorage.clear();
-        }
+      fetch("http://localhost:4821/api/cars/my/" + userId)
+        .then((res) => res.json())
+        .then((dataObj) => {
+          if (dataObj.type === "success") {
+            setMyCars(dataObj.list);
+          } else {
+            console.error(dataObj.message);
+          }
+        })
+        .catch(console.error);
     }
+  }, [loginStatus, userId]);
 
-    function updateUserId(id) {
-        setUserId(id);
-    }
+  function updateLoginStatus(newStatusValue) {
+    setLoginStatus(newStatusValue);
+  }
 
-    function updateTotalSumToPay(sumChange) {
-        setTotalSumToPay(n => n + sumChange);
-    }
+  function updateUserId(id) {
+    setUserId(id);
+  }
 
-    function updateNewestCars(list) {
-        setNewestCars(list);
-    }
+  function updateTotalSumToPay(sumChange) {
+    setTotalSumToPay((n) => n + sumChange);
+  }
 
-    function updateAllCars(list) {
-        setAllCars(list);
-    }
+  function updateNewestCars(list) {
+    setNewestCars(list);
+  }
 
-    function updateMyCars(list) {
-        setMyCars(list);
-    }
+  function updateAllCars(list) {
+    setAllCars(list);
+  }
 
-    function addMyNewCar(car) {
-        setMyCars(prev => [...prev, car]);
-    }
+  function updateMyCars(list) {
+    setMyCars(list);
+  }
 
-    function deleteMyCar(carId) {
-        setMyCars(prev => prev.filter(car => car.id !== carId));
-    }
+  function addMyNewCar(car) {
+    setMyCars((prev) => [...prev, car]);
+  }
 
-    function updateCartItemAmount(name, amountChange) {
-        console.log('>>>', name, amountChange);
-    }
+  function deleteMyCar(carId) {
+    setMyCars((prev) => prev.filter((car) => car.id !== carId));
+  }
 
-    const value = {
-        loginStatus,
-        updateLoginStatus,
-        userId,
-        updateUserId,
-        totalSumToPay,
-        updateTotalSumToPay,
-        cartData,
-        updateCartItemAmount,
-        newestCars,
-        updateNewestCars,
-        allCars,
-        updateAllCars,
-        myCars,
-        updateMyCars,
-        addMyNewCar,
-        deleteMyCar,
-    };
+  function updateCartItemAmount(name, amountChange) {
+    console.log(">>>", name, amountChange);
+  }
 
-    return (
-        <GlobalContext.Provider value={value}>
-            {props.children}
-        </GlobalContext.Provider>
-    );
+  const value = {
+    loginStatus,
+    updateLoginStatus,
+    userId,
+    updateUserId,
+    totalSumToPay,
+    updateTotalSumToPay,
+    cartData,
+    updateCartItemAmount,
+    newestCars,
+    updateNewestCars,
+    allCars,
+    updateAllCars,
+    myCars,
+    updateMyCars,
+    addMyNewCar,
+    deleteMyCar,
+  };
+
+  return (
+    <GlobalContext.Provider value={value}>
+      {props.children}
+    </GlobalContext.Provider>
+  );
 }

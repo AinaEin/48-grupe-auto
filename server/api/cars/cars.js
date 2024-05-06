@@ -52,15 +52,14 @@ carsRouter.get("/newest", async (req, res) => {
 });
 
 carsRouter.post("/create", async (req, res) => {
-  const { userId, name, price } = req.body;
-  const img = "http://localhost:4821/img/cars/7.jpg";
+  const { userId, name, price, image } = req.body;
 
   try {
     const insertQuery = `INSERT INTO cars (userId, name, img, price) VALUES (?, ?, ?, ?);`;
     const dbResponse = await connection.execute(insertQuery, [
       userId,
       name,
-      img,
+      image,
       price * 100,
     ]);
 
@@ -82,7 +81,7 @@ carsRouter.post("/create", async (req, res) => {
             id: dbResponse[0].insertId,
             name,
             price,
-            img: "",
+            img: image,
           },
         })
       );

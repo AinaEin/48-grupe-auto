@@ -2,12 +2,14 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import { connection } from "./db.js";
 import { apiRouter } from "./api/api.js";
 
 const app = express();
 
 const corsOptions = {
+  credentials: true,
   origin: "http://localhost:4820",
 };
 const helmetOptions = {
@@ -16,6 +18,7 @@ const helmetOptions = {
 
 app.use(cors(corsOptions));
 app.use(helmet(helmetOptions));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
