@@ -6,7 +6,7 @@ export function PageMyAutoList() {
   const { myCars, deleteMyCar } = useContext(GlobalContext);
 
   function handleDeleteClick(carId) {
-    fetch("http://localhost:4821/api/car/" + carId, {
+    fetch("http://localhost:4821/api/cars/" + carId, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -52,8 +52,16 @@ export function PageMyAutoList() {
                   </td>
                   <td>{car.price}</td>
                   <td>
-                    {/* <button>Edit</button> */}
-                    <button onClick={() => handleDeleteClick(car.id)}>
+                    <Link
+                      className="btn btn-sm btn-primary"
+                      to={`/account/my-auto-list/${car.id}/edit`}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDeleteClick(car.id)}
+                    >
                       Delete
                     </button>
                   </td>
