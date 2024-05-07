@@ -1,4 +1,5 @@
 import { connection } from "../../db.js";
+import { hash } from "../../lib/hash.js";
 
 export async function apiRegisterPost(req, res) {
   const minEmailLength = 6;
@@ -150,7 +151,10 @@ export async function apiRegisterPost(req, res) {
 
   try {
     const insertQuery = `INSERT INTO users (email, password) VALUES (?, ?);`;
-    const dbResponse = await connection.execute(insertQuery, [email, password]);
+    const dbResponse = await connection.execute(insertQuery, [
+      email,
+      hash(password),
+    ]);
 
     if (dbResponse[0].affectedRows !== 1) {
       return res.send(
