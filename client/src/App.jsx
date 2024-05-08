@@ -13,6 +13,7 @@ import { PageMyAutoEdit } from "./pages/my-auto-list/PageMyAutoEdit";
 import { PageAccountSettings } from "./pages/settings/PageAccountSettings";
 import { PageNotFound } from "./pages/errors/PageNotFound";
 import { ContextWrapper } from "./context/GlobalContext";
+import { AccountLayout } from "./layout/AccountLayout";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
             <Route path="/login" element={<PageLogin />} />
           </Route>
 
-          <Route Component={BasicLayout}>
+          <Route Component={AccountLayout}>
             <Route path="/account" element={<PageDashboard />} />
             <Route path="/account/my-auto-list" element={<PageMyAutoList />} />
             <Route

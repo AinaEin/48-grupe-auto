@@ -10,7 +10,7 @@ export function PageMyAutoCreate() {
   const [price, setPrice] = useState("");
   const [responseText, setResponseText] = useState("");
   const [responseType, setResponseType] = useState("");
-  const { userId, addMyNewCar } = useContext(GlobalContext);
+  const { addMyNewCar } = useContext(GlobalContext);
 
   function handleNameChange(e) {
     setName(e.target.value);
@@ -26,6 +26,7 @@ export function PageMyAutoCreate() {
 
     fetch("http://localhost:4821/api/upload/car", {
       method: "POST",
+      credentials: "include",
       body: formData,
     })
       .then((res) => res.json())
@@ -52,7 +53,8 @@ export function PageMyAutoCreate() {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ userId, name, price: +price, image }),
+      credentials: "include",
+      body: JSON.stringify({ name, price: +price, image }),
     })
       .then((res) => res.json())
       .then((data) => {

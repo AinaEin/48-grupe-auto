@@ -7,8 +7,9 @@ import { useParams } from "react-router-dom";
 
 export function PageMyAutoEdit() {
   const { carId } = useParams();
-  const { userId, addMyNewCar, myCars } = useContext(GlobalContext);
+  const { addMyNewCar, myCars } = useContext(GlobalContext);
   const [car, setCar] = useState({
+    id: -1,
     name: "",
     price: "",
     img: "",
@@ -40,6 +41,7 @@ export function PageMyAutoEdit() {
 
     fetch("http://localhost:4821/api/upload/car", {
       method: "POST",
+      credentials: "include",
       body: formData,
     })
       .then((res) => res.json())
@@ -60,15 +62,14 @@ export function PageMyAutoEdit() {
       return;
     }
 
-    // TODO: api/cars/update
-    fetch("http://localhost:4821/api/cars/create", {
-      method: "POST",
+    fetch("http://localhost:4821/api/cars/" + car.id, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
-        userId,
         name: car.name,
         price: +car.price,
         image: car.img,

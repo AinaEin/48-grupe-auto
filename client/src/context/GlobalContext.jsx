@@ -39,7 +39,10 @@ export function ContextWrapper(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.type === "success") {
+          setUserId(data.user.id);
+          setLoginStatus(true);
+        }
       })
       .catch(console.error);
   }, []);
@@ -51,7 +54,9 @@ export function ContextWrapper(props) {
         .then((dataObj) => setCartData(dataObj.data))
         .catch(console.error);
 
-      fetch("http://localhost:4821/api/cars/my/" + userId)
+      fetch("http://localhost:4821/api/cars/my", {
+        credentials: "include",
+      })
         .then((res) => res.json())
         .then((dataObj) => {
           if (dataObj.type === "success") {
@@ -62,7 +67,7 @@ export function ContextWrapper(props) {
         })
         .catch(console.error);
     }
-  }, [loginStatus, userId]);
+  }, [loginStatus]);
 
   function updateLoginStatus(newStatusValue) {
     setLoginStatus(newStatusValue);
