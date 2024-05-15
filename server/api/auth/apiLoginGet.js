@@ -4,8 +4,8 @@ export async function apiLoginGet(req, res) {
   const loginTokenSize = 20;
 
   if (
-    typeof req.cookies.loginToken !== "string" ||
-    req.cookies.loginToken.length !== loginTokenSize
+    typeof req.cookies.LOGIN_TOKEN !== "string" ||
+    req.cookies.LOGIN_TOKEN.length !== loginTokenSize
   ) {
     return res.send(
       JSON.stringify({
@@ -19,7 +19,7 @@ export async function apiLoginGet(req, res) {
   try {
     const selectQuery = "SELECT userId FROM login_token WHERE token = ?;";
     const dbResponse = await connection.execute(selectQuery, [
-      req.cookies.loginToken,
+      req.cookies[LOGIN_TOKEN],
     ]);
 
     if (dbResponse[0].length !== 1) {

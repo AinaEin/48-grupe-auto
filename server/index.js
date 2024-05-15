@@ -5,12 +5,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { connection } from "./db.js";
 import { apiRouter } from "./api/api.js";
+import { SERVER_PORT, CLIENT_PORT, LOGIN_TOKEN } from "./env.js";
 
 const app = express();
 
 const corsOptions = {
   credentials: true,
-  origin: "http://localhost:4820",
+  origin: "http://localhost:" + CLIENT_PORT,
 };
 const helmetOptions = {
   crossOriginResourcePolicy: false,
@@ -25,7 +26,9 @@ app.use(express.static("public"));
 
 // middleware
 app.use(async (req, res, next) => {
-  const { loginToken } = req.cookies;
+  // DEV
+  const loginToken = req.cookies[LOGIN_TOKEN];
+  console.log(LOGIN_TOKEN, loginToken);
 
   req.user = {
     id: -1,
@@ -76,6 +79,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-app.listen(4821, () => {
-  console.log(`\nhttp://localhost:4821`);
+app.listen(SERVER_PORT, () => {
+  console.log(`\nhttp://localhost:${SERVER_PORT}`);
 });
