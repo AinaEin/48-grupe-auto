@@ -7,7 +7,9 @@ import { useParams } from "react-router-dom";
 
 export function PageMyAutoEdit() {
   const { carId } = useParams();
-  const { addMyNewCar, myCars } = useContext(GlobalContext);
+  const { updateMyCar, myCars } = useContext(GlobalContext);
+  const [responseText, setResponseText] = useState("");
+  const [responseType, setResponseType] = useState("");
   const [car, setCar] = useState({
     id: -1,
     name: "",
@@ -23,9 +25,6 @@ export function PageMyAutoEdit() {
       }
     }
   }, [myCars, carId]);
-
-  const [responseText, setResponseText] = useState("");
-  const [responseType, setResponseType] = useState("");
 
   function handleNameChange(e) {
     setCar((prev) => ({ ...prev, name: e.target.value }));
@@ -81,8 +80,7 @@ export function PageMyAutoEdit() {
         setResponseText(data.message);
 
         if (data.type === "success") {
-          // TODO: sukeisti objektus vietomis, o ne prideti nauja
-          addMyNewCar(data.car);
+          updateMyCar(car);
         }
       })
       .catch((err) => console.error(err));

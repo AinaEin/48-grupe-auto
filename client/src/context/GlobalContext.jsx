@@ -17,6 +17,7 @@ export const initialContext = {
   updateAllCars: () => {},
   myCars: [],
   updateMyCars: () => {},
+  updateMyCar: () => {},
 };
 
 export const GlobalContext = createContext(initialContext);
@@ -93,6 +94,22 @@ export function ContextWrapper(props) {
     setMyCars(list);
   }
 
+  function updateMyCar(car) {
+    setMyCars((prev) => {
+      const updatedList = [];
+
+      for (const item of prev) {
+        if (item.id !== car.id) {
+          updatedList.push(item);
+        } else {
+          updatedList.push(car);
+        }
+      }
+
+      return updatedList;
+    });
+  }
+
   function addMyNewCar(car) {
     setMyCars((prev) => [...prev, car]);
   }
@@ -120,6 +137,7 @@ export function ContextWrapper(props) {
     updateAllCars,
     myCars,
     updateMyCars,
+    updateMyCar,
     addMyNewCar,
     deleteMyCar,
   };

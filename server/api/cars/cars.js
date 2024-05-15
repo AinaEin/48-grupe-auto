@@ -183,7 +183,24 @@ carsRouter.put('/:carId', async (req, res) => {
         const updateQuery = `UPDATE cars SET name = ?, price = ?, img = ? WHERE id = ?;`;
         const dbResponse = await connection.execute(updateQuery, [name, price, image, carId]);
 
-        console.log(dbResponse);
+        if (dbResponse.affectedRows === 0) {
+            return res.send(JSON.stringify({
+                type: 'error',
+                message: 'Critical error while trying to update car details',
+            }));
+        }
+
+        if (dbResponse.affectedRows > 1) {
+            return res.send(JSON.stringify({
+                type: 'error',
+                message: 'Car details updated, but with some unexpected side effects',
+            }));
+        }
+
+        return res.send(JSON.stringify({
+            type: 'success',
+            message: 'Car details updated',
+        }));
     } catch (error) {
         console.error(error);
 
