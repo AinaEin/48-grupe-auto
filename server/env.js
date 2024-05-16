@@ -21,6 +21,11 @@ dotenv.config({
   path: processArgs.env ?? ".env",
 });
 
-export const CLIENT_PORT = process.env.CLIENT_PORT;
-export const SERVER_PORT = process.env.SERVER_PORT;
-export const LOGIN_TOKEN = process.env.LOGIN_TOKEN;
+const e = process.env;
+
+export const CLIENT_PORT = process.env.CLIENT_PORT ? +e.CLIENT_PORT : 4820;
+export const SERVER_PORT = process.env.SERVER_PORT ? +e.SERVER_PORT : 4821;
+export const DOMAIN = e.DOMAIN ?? 'localhost';
+export const LOGIN_TOKEN = process.env.LOGIN_TOKEN ?? 'token';
+export const HASH_SALT_PASSWORD = process.env.HASH_SALT_PASSWORD ?? '';
+export const SESSION_DURATION = process.env.SESSION_DURATION ? +e.SESSION_DURATION : 3600;

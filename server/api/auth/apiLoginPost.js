@@ -1,5 +1,5 @@
 import { connection } from "../../db.js";
-import { LOGIN_TOKEN } from "../../env.js";
+import { DOMAIN, LOGIN_TOKEN, SESSION_DURATION } from "../../env.js";
 import { hash } from "../../lib/hash.js";
 import { randomString } from "../../lib/randomString.js";
 
@@ -89,11 +89,11 @@ export async function apiLoginPost(req, res) {
    );
  }
 
-    const loginToken = randomString(20);
+    const randomLoginToken = randomString(20);
 
     try {
         const insertQuery = `INSERT INTO login_token (userId, token) VALUES (?, ?);`;
-        const dbResponse = await connection.execute(insertQuery, [userObj.id, loginToken]);
+        const dbResponse = await connection.execute(insertQuery, [userObj.id, randomLoginToken]);
 
         if (dbResponse[0].affectedRows !== 1) {
             return res.send(JSON.stringify({
@@ -111,10 +111,10 @@ export async function apiLoginPost(req, res) {
     }
 
     const cookie = [
-        LOGIN_TOKEN + '=' + loginToken,
-        'domain=localhost',
+        LOGIN_TOKEN + '=' + randomLoginToken,
+        'domain=' + DOMAIN,
         'path=/',
-        'max-age=' + 1800,
+        'max-age=' + SESSION_DURATION,
         // 'Secure',
         'SameSite=Lax',
         'HttpOnly',
